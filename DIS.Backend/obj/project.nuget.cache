@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WR2QSGrqdUQ=",
+  "success": true,
+  "projectFilePath": "/Users/annahumle/Desktop/DIS-Project/DIS.ApiTwo/DIS.ApiTwo.csproj",
+  "expectedPackageFiles": [
+    "/Users/annahumle/.nuget/packages/microsoft.aspnetcore.openapi/9.0.4/microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
+    "/Users/annahumle/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
