@@ -2,11 +2,13 @@ namespace DIS.Backend.Models;
 
 public class Cycle
 {
+    public int CycleId { get; set; }
+
     public int CycleNumber { get; set; }
 
     public DateTime StartDate { get; set; }
 
-    public DateTime EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     public int PersonId { get; set; }
 

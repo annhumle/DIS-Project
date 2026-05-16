@@ -2,7 +2,7 @@ namespace DIS.Backend.Models;
 
 public class DailyLog
 {
-    public int LogId { get; set; }
+    public int DailyLogId { get; set; }
 
     public DateTime Date { get; set; }
 
@@ -11,8 +11,10 @@ public class DailyLog
     public int CycleId { get; set; }
 
     public Cycle Cycle { get; set; } = null!;
-    
+
+    public int? FlowLevelId { get; set; }
+
     public FlowLevel? FlowLevel { get; set; }
 
-    public List<PhysicalSymptom> PhysicalSymptoms { get; set; } = new();
+    public List<DailyLogSymptom> DailyLogSymptoms { get; set; } = new();
 }
