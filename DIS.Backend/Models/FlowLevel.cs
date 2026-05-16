@@ -2,7 +2,7 @@ namespace DIS.Backend.Models;
 
 public class FlowLevel
 {
-    public int FlowId { get; set; }
+    public int FlowLevelId { get; set; }
 
     public string Amount { get; set; } = string.Empty;
 
