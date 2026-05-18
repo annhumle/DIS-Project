@@ -1,5 +1,5 @@
+using DIS.ApiTwo.CycleTracker.Models;
 using DIS.ApiTwo.DTO;
-using DIS.ApiTwo.Models;
 
 namespace DIS.ApiTwo.CycleTracker.Interfaces
 {
