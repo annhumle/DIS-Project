@@ -1,6 +1,6 @@
 using DIS.ApiTwo.CycleTracker.Interfaces;
+using DIS.ApiTwo.CycleTracker.Models;
 using DIS.ApiTwo.Data;
-using DIS.ApiTwo.Models;
 using Npgsql;
 
 namespace DIS.ApiTwo.CycleTracker;

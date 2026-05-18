@@ -1,4 +1,4 @@
-namespace DIS.ApiTwo.Models;
+namespace DIS.ApiTwo.CycleTracker.Models;
 
 public class Person
 {
