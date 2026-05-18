@@ -1,4 +1,4 @@
-namespace DIS.Backend.Models;
+namespace DIS.ApiTwo.Models;
 
 public class Person
 {
