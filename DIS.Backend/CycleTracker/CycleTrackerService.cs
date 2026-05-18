@@ -1,0 +1,28 @@
+using DIS.ApiTwo.CycleTracker.Interfaces;
+using DIS.ApiTwo.DTO;
+using DIS.ApiTwo.Interfaces;
+
+namespace DIS.ApiTwo.CycleTracker;
+
+public class CycleTrackerService : ICycleTrackerService
+{
+    private readonly ICycleTrackerRepository _repository;
+
+    public CycleTrackerService(ICycleTrackerRepository repository)
+    {
+        _repository = repository;
+    }
+
+    public async Task<List<CycleDTO>> GetAllCycles()
+    {
+        var cycles = await _repository.GetAllCycles();
+
+        return cycles.Select(cycle => new CycleDTO
+        {
+            CycleId = cycle.CycleId,
+            StartDate = cycle.StartDate,
+            EndDate = cycle.EndDate
+        }).ToList();
+    }
+}
+
