@@ -5,5 +5,6 @@ namespace DIS.ApiTwo.Interfaces
     public interface ICycleTrackerService
     {
         Task<List<CycleDTO>> GetAllCycles();
+        Task<List<FlowLevelDTO>> GetAllFlowLevels();
     }
 }
