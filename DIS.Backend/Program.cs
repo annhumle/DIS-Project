@@ -13,6 +13,18 @@ builder.Services.AddScoped<DatabaseConnection>();
 builder.Services.AddScoped<ICycleTrackerRepository, CycleTrackerRepository>();
 builder.Services.AddScoped<ICycleTrackerService, CycleTrackerService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -21,6 +33,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontendPolicy");
 
 app.MapControllers();
 
