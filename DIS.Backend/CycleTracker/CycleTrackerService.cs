@@ -24,5 +24,16 @@ public class CycleTrackerService : ICycleTrackerService
             EndDate = cycle.EndDate
         }).ToList();
     }
+
+    public async Task<List<FlowLevelDTO>> GetAllFlowLevels()
+    {
+        var flowLevels = await _repository.GetAllFlowLevels();
+
+        return flowLevels.Select(flowLevel => new FlowLevelDTO
+        {
+            FlowLevelId = flowLevel.FlowLevelId,
+            LevelName = flowLevel.LevelName,
+        }).ToList();
+    }
 }
 

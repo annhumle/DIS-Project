@@ -6,3 +6,9 @@ public class CycleDTO
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
 }
+
+public class FlowLevelDTO
+{
+    public int FlowLevelId { get; set; }
+    public string LevelName { get; set;} = string.Empty;
+}

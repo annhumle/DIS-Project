@@ -42,4 +42,31 @@ public class CycleTrackerRepository : ICycleTrackerRepository
 
         return cycles;
     }
+
+    public async Task<List<FlowLevel>> GetAllFlowLevels()
+    {
+        var flowLevels = new List<FlowLevel>();
+
+        await using var connection = _database.CreateConnection();
+        await connection.OpenAsync();
+
+        var sql = """
+            SELECT flow_level_id, level_name
+            FROM flow_levels
+        """;
+        
+        await using var command = new NpgsqlCommand(sql, connection);
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            flowLevels.Add(new FlowLevel
+            {
+                FlowLevelId = reader.GetInt32(0),
+                LevelName = reader.GetString(1)
+            });
+        }
+        return flowLevels; 
+    }
 }
+

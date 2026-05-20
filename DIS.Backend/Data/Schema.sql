@@ -9,3 +9,8 @@ CREATE TABLE cycles (
     end_date DATE,
     person_id INTEGER NOT NULL REFERENCES persons(person_id)
 );
+
+CREATE TABLE flow_levels (
+    flow_level_id SERIAL PRIMARY KEY,
+    level_name TEXT UNIQUE NOT NULL
+)

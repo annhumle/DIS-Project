@@ -25,4 +25,12 @@ public class CycleTrackerController : ControllerBase
 
         return Ok(cycles);
     }
+
+    [HttpGet("flow-levels")]
+    public async Task<IActionResult> GetFlowLevel()
+    {
+        var flowLevels = await _cycleTrackerService.GetAllFlowLevels();
+
+        return Ok(flowLevels);
+    }
 }

@@ -6,5 +6,6 @@ namespace DIS.ApiTwo.CycleTracker.Interfaces
     public interface ICycleTrackerRepository
     {
         Task<List<Cycle>> GetAllCycles();
+        Task<List<FlowLevel>> GetAllFlowLevels();
     }
 }
