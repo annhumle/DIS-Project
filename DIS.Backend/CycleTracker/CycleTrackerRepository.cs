@@ -52,7 +52,7 @@ public class CycleTrackerRepository : ICycleTrackerRepository
 
         var sql = """
             SELECT flow_level_id, level_name
-            FROM flow_levels
+            FROM flow_levels;
         """;
         
         await using var command = new NpgsqlCommand(sql, connection);
@@ -68,5 +68,33 @@ public class CycleTrackerRepository : ICycleTrackerRepository
         }
         return flowLevels; 
     }
+
+    public async Task<List<PhysicalSymptom>> GetAllPhysicalSymptom()
+    {
+        var physicalSymptom = new List<PhysicalSymptom>();
+
+        await using var connection = _database.CreateConnection();
+        await connection.OpenAsync();
+
+        var sql = """
+            SELECT physical_symptom_id, physical_symptom_name
+            FROM physical_symptoms;
+        """;
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            physicalSymptom.Add(new PhysicalSymptom
+            {
+                PhysicalSymptomId = reader.GetInt32(0),
+                PhysicalSymptomName = reader.GetString(1)
+            });
+        }
+
+        return physicalSymptom;
+    }
 }
+
 

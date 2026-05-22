@@ -33,4 +33,12 @@ public class CycleTrackerController : ControllerBase
 
         return Ok(flowLevels);
     }
+
+    [HttpGet("physical-symptoms")]
+    public async Task<IActionResult> GetPhysicalSymptom()
+    {
+        var physicalSymptom = await _cycleTrackerService.GetAllPhysicalSymptom();
+
+        return Ok(physicalSymptom);
+    }
 }

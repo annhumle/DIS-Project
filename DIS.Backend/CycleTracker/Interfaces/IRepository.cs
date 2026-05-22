@@ -7,5 +7,6 @@ namespace DIS.ApiTwo.CycleTracker.Interfaces
     {
         Task<List<Cycle>> GetAllCycles();
         Task<List<FlowLevel>> GetAllFlowLevels();
+        Task<List<PhysicalSymptom>> GetAllPhysicalSymptom();
     }
 }
