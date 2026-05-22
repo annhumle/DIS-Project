@@ -35,5 +35,16 @@ public class CycleTrackerService : ICycleTrackerService
             LevelName = flowLevel.LevelName,
         }).ToList();
     }
+
+    public async Task<List<PhysicalSymptomDTO>> GetAllPhysicalSymptom()
+    {
+        var physicalSymptom = await _repository.GetAllPhysicalSymptom();
+
+        return physicalSymptom.Select(symptom => new PhysicalSymptomDTO
+        {
+            PhysicalSymptomId = symptom.PhysicalSymptomId,
+            PhysicalSymptomName = symptom.PhysicalSymptomName
+        }).ToList();
+    }
 }
 

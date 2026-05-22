@@ -13,4 +13,9 @@ CREATE TABLE cycles (
 CREATE TABLE flow_levels (
     flow_level_id SERIAL PRIMARY KEY,
     level_name TEXT UNIQUE NOT NULL
-)
+);
+
+CREATE TABLE physical_symptom (
+    physical_symptom_id SERIAL PRIMARY KEY,
+    physical_symptom_name TEXT UNIQUE NOT NULL
+);
