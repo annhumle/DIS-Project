@@ -1,3 +1,4 @@
+using DIS.ApiTwo.DTO;
 using DIS.ApiTwo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,5 +41,31 @@ public class CycleTrackerController : ControllerBase
         var physicalSymptom = await _cycleTrackerService.GetAllPhysicalSymptom();
 
         return Ok(physicalSymptom);
+    }
+
+    [HttpGet("cycles/{id}/logs")]
+    public async Task<IActionResult> GetLogsByCycleId(int id)
+    {
+        var logs = await _cycleTrackerService.GetLogsByCycleId(id);
+
+        return Ok(logs);
+    }
+
+    [HttpPost("dailylogs")]
+    public async Task<IActionResult> CreateDailyLog([FromBody] CreateDailyLogDTO dto)
+    {
+        var created = await _cycleTrackerService.CreateDailyLog(dto);
+
+        return Ok(created);
+    }
+
+    [HttpPut("dailylogs/{id}")]
+    public async Task<IActionResult> UpdateDailyLog(int id, [FromBody] UpdateDailyLogDTO dto)
+    {
+        var updated = await _cycleTrackerService.UpdateDailyLog(id, dto);
+
+        if (updated is null) return NotFound();
+
+        return Ok(updated);
     }
 }

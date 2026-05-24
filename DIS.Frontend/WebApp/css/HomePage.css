@@ -1,0 +1,304 @@
+body {
+    background: #1e2a4a;
+}
+
+#root {
+    background: transparent;
+    border-inline: none;
+}
+
+.cycle-header {
+    text-align: center;
+    padding: 2.5rem 1.5rem 0.5rem;
+}
+
+.cycle-title {
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.cycle-page {
+    --rose-50: #fff5f8;
+    --rose-100: #ffe4ec;
+    --rose-200: #fbcedb;
+    --rose-300: #f6a8c1;
+    --rose-500: #e96a90;
+    --rose-700: #b85b78;
+    --rose-900: #6d3a4f;
+
+    max-width: 1040px;
+    margin: 1.5rem auto 2.5rem;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 1.5rem;
+    text-align: left;
+    color: var(--rose-900);
+}
+
+.cycle-page .card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 10px 30px rgba(233, 106, 144, 0.10);
+    border: 1px solid var(--rose-100);
+}
+
+.cycle-page .panel-date {
+    font-size: 26px;
+    font-weight: 500;
+    margin: 0 0 4px;
+    color: var(--rose-900);
+    letter-spacing: -0.3px;
+}
+
+.cycle-page .day-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--rose-100);
+    color: var(--rose-700);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.cycle-page .day-pill--muted {
+    background: #f1f1f4;
+    color: #8a8a99;
+}
+
+.cycle-page input[type="date"],
+.cycle-page select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1px solid var(--rose-200);
+    border-radius: 14px;
+    background: var(--rose-50);
+    font-size: 15px;
+    color: var(--rose-900);
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.cycle-page input[type="date"]:focus,
+.cycle-page select:focus {
+    outline: none;
+    border-color: var(--rose-300);
+    box-shadow: 0 0 0 3px rgba(246, 168, 193, 0.3);
+}
+
+.cycle-page .field {
+    margin-bottom: 1.25rem;
+}
+
+.cycle-page .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rose-700);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.cycle-page fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+}
+
+.cycle-page legend {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rose-700);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 0;
+}
+
+.cycle-page .symptom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.cycle-page .symptom-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--rose-50);
+    border: 1px solid var(--rose-100);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--rose-900);
+    user-select: none;
+    transition: background 0.15s, border-color 0.15s, transform 0.05s;
+}
+
+.cycle-page .symptom-chip:hover {
+    background: var(--rose-100);
+}
+
+.cycle-page .symptom-chip.active {
+    background: var(--rose-200);
+    border-color: var(--rose-300);
+    color: var(--rose-900);
+    font-weight: 600;
+}
+
+.cycle-page .symptom-chip input {
+    accent-color: var(--rose-500);
+}
+
+.cycle-page .save-button {
+    background: linear-gradient(135deg, var(--rose-300), var(--rose-500));
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(233, 106, 144, 0.3);
+    transition: transform 0.1s, box-shadow 0.15s, opacity 0.15s;
+    font-family: inherit;
+}
+
+.cycle-page .save-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(233, 106, 144, 0.4);
+}
+
+.cycle-page .save-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.cycle-page .save-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.cycle-page .cal {
+    width: 100%;
+}
+
+.cycle-page .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.cycle-page .cal-month {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--rose-900);
+    text-transform: capitalize;
+    letter-spacing: 0.2px;
+}
+
+.cycle-page .cal-nav {
+    background: var(--rose-50);
+    border: 1px solid var(--rose-100);
+    color: var(--rose-700);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+}
+
+.cycle-page .cal-nav:hover {
+    background: var(--rose-100);
+    color: var(--rose-900);
+}
+
+.cycle-page .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--rose-700);
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cycle-page .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.cycle-page .cal-cell {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: transparent;
+    font-size: 13px;
+    color: var(--rose-900);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    position: relative;
+    padding: 0;
+}
+
+.cycle-page .cal-cell.empty {
+    cursor: default;
+}
+
+.cycle-page .cal-cell:hover:not(.empty):not(.selected) {
+    background: var(--rose-100);
+}
+
+.cycle-page .cal-cell.today {
+    border-color: var(--rose-300);
+    font-weight: 600;
+}
+
+.cycle-page .cal-cell.selected {
+    background: linear-gradient(135deg, var(--rose-300), var(--rose-500));
+    color: #ffffff;
+    font-weight: 600;
+    border-color: transparent;
+}
+
+.cycle-page .cal-cell.has-log:not(.selected)::after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--rose-500);
+    border-radius: 50%;
+}
+
+@media (max-width: 720px) {
+    .cycle-page {
+        grid-template-columns: 1fr;
+        margin: 1rem auto;
+    }
+}

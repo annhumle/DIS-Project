@@ -19,6 +19,22 @@ export function post(url, data) {
         .catch(handleError);
 }
 
+export function put(url, data) {
+    const options = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        credentials: "include",
+        body: JSON.stringify(data || {}),
+    };
+
+    return fetch(BASE_URL + "/" + url, options)
+        .then(parseFetchResponse)
+        .then(handleResponse)
+        .catch(handleError);
+}
+
 export function postForm(url, data) {
     const options = {
         method: "POST",

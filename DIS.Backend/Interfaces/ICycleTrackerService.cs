@@ -7,5 +7,8 @@ namespace DIS.ApiTwo.Interfaces
         Task<List<CycleDTO>> GetAllCycles();
         Task<List<FlowLevelDTO>> GetAllFlowLevels();
         Task<List<PhysicalSymptomDTO>> GetAllPhysicalSymptom();
+        Task<List<DailyLogDTO>> GetLogsByCycleId(int cycleId);
+        Task<DailyLogDTO> CreateDailyLog(CreateDailyLogDTO dto);
+        Task<DailyLogDTO?> UpdateDailyLog(int dailyLogId, UpdateDailyLogDTO dto);
     }
 }
