@@ -1,4 +1,5 @@
 using DIS.ApiTwo.CycleTracker.Interfaces;
+using DIS.ApiTwo.CycleTracker.Models;
 using DIS.ApiTwo.DTO;
 using DIS.ApiTwo.Interfaces;
 
@@ -45,6 +46,55 @@ public class CycleTrackerService : ICycleTrackerService
             PhysicalSymptomId = symptom.PhysicalSymptomId,
             PhysicalSymptomName = symptom.PhysicalSymptomName
         }).ToList();
+    }
+
+    public async Task<List<DailyLogDTO>> GetLogsByCycleId(int cycleId)
+    {
+        var dailyLogs = await _repository.GetLogsByCycleId(cycleId);
+
+        return dailyLogs.Select(ToDto).ToList();
+    }
+
+    public async Task<DailyLogDTO> CreateDailyLog(CreateDailyLogDTO dto)
+    {
+        var dailyLog = new DailyLog
+        {
+            Date = dto.Date,
+            CycleDay = dto.CycleDay,
+            CycleId = dto.CycleId,
+            FlowLevelId = dto.FlowLevelId
+        };
+
+        var created = await _repository.CreateDailyLog(dailyLog, dto.SymptomIds);
+
+        return ToDto(created);
+    }
+
+    public async Task<DailyLogDTO?> UpdateDailyLog(int dailyLogId, UpdateDailyLogDTO dto)
+    {
+        var dailyLog = new DailyLog
+        {
+            Date = dto.Date,
+            CycleDay = dto.CycleDay,
+            FlowLevelId = dto.FlowLevelId
+        };
+
+        var updated = await _repository.UpdateDailyLog(dailyLogId, dailyLog, dto.SymptomIds);
+
+        return updated is null ? null : ToDto(updated);
+    }
+
+    private static DailyLogDTO ToDto(DailyLog log)
+    {
+        return new DailyLogDTO
+        {
+            DailyLogId = log.DailyLogId,
+            Date = log.Date,
+            CycleDay = log.CycleDay,
+            CycleId = log.CycleId,
+            FlowLevelId = log.FlowLevelId,
+            SymptomIds = log.DailyLogSymptoms.Select(s => s.PhysicalSymptomId).ToList()
+        };
     }
 }
 

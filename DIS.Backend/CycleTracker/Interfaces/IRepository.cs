@@ -8,5 +8,8 @@ namespace DIS.ApiTwo.CycleTracker.Interfaces
         Task<List<Cycle>> GetAllCycles();
         Task<List<FlowLevel>> GetAllFlowLevels();
         Task<List<PhysicalSymptom>> GetAllPhysicalSymptom();
+        Task<List<DailyLog>> GetLogsByCycleId(int cycleId);
+        Task<DailyLog> CreateDailyLog(DailyLog dailyLog, List<int> symptomIds);
+        Task<DailyLog?> UpdateDailyLog(int dailyLogId, DailyLog dailyLog, List<int> symptomIds);
     }
 }
