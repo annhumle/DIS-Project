@@ -96,5 +96,10 @@ public class CycleTrackerService : ICycleTrackerService
             SymptomIds = log.DailyLogSymptoms.Select(s => s.PhysicalSymptomId).ToList()
         };
     }
+
+    public async Task<List<SymptomSearchResultDTO>> SearchDailyLogsBySymptomRegexPattern(string pattern)
+    {
+        return await _repository.SearchDailyLogsBySymptomRegexPattern(pattern);
+    }
 }
 

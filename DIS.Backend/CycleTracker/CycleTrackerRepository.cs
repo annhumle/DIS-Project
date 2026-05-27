@@ -1,6 +1,7 @@
 using DIS.ApiTwo.CycleTracker.Interfaces;
 using DIS.ApiTwo.CycleTracker.Models;
 using DIS.ApiTwo.Data;
+using DIS.ApiTwo.DTO;
 using Npgsql;
 
 namespace DIS.ApiTwo.CycleTracker;
@@ -284,6 +285,62 @@ public class CycleTrackerRepository : ICycleTrackerRepository
             command.Parameters.AddWithValue("@physicalSymptomId", symptomId);
             await command.ExecuteNonQueryAsync();
         }
+    }
+
+    public async Task<List<SymptomSearchResultDTO>> SearchDailyLogsBySymptomRegexPattern(string pattern)
+    {
+       var searchResults = new List<SymptomSearchResultDTO>();
+
+        if (string.IsNullOrWhiteSpace(pattern))
+        {
+            return searchResults;
+        }
+
+        await using var connection = _database.CreateConnection();
+        await connection.OpenAsync();
+
+        var sql = """
+            SELECT
+                dl.daily_log_id,
+                dl.date,
+                dl.cycle_day,
+                dl.cycle_id,
+                ps.physical_symptom_id,
+                ps.physical_symptom_name,
+                fl.flow_level_id,
+                fl.level_name
+            FROM daily_logs dl
+            JOIN daily_log_symptoms dls
+                ON dl.daily_log_id = dls.daily_log_id
+            JOIN physical_symptom ps
+                ON dls.physical_symptom_id = ps.physical_symptom_id
+            LEFT JOIN flow_levels fl
+                ON dl.flow_level_id = fl.flow_level_id
+            WHERE ps.physical_symptom_name ~* @pattern
+            ORDER BY dl.date, dl.cycle_day;
+        """;
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@pattern", pattern);
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            searchResults.Add(new SymptomSearchResultDTO
+            {
+                DailyLogId = reader.GetInt32(0),
+                Date = reader.GetDateTime(1),
+                CycleDay = reader.GetInt32(2),
+                CycleId = reader.GetInt32(3),
+                PhysicalSymptomId = reader.GetInt32(4),
+                PhysicalSymptomName = reader.GetString(5),
+                FlowLevelId = reader.IsDBNull(6) ? null : reader.GetInt32(6),
+                FlowLevelName = reader.IsDBNull(7) ? null : reader.GetString(7)
+            });
+        }
+
+        return searchResults;
     }
 }
 

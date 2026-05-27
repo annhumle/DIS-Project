@@ -1,6 +1,7 @@
 using DIS.ApiTwo.DTO;
 using DIS.ApiTwo.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
 
 namespace DIS.ApiTwo.Controllers;
 
@@ -67,5 +68,19 @@ public class CycleTrackerController : ControllerBase
         if (updated is null) return NotFound();
 
         return Ok(updated);
+    }
+
+    [HttpGet("dailylogs/search")]
+    public async Task<IActionResult> SearchDailyLogsBySymptomRegexPattern([FromQuery] string pattern = "")
+    {
+        try
+        {
+            var results = await _cycleTrackerService.SearchDailyLogsBySymptomRegexPattern(pattern);
+            return Ok(results);
+        }
+        catch (PostgresException ex) when (ex.SqlState == "2201B")
+        {
+            return BadRequest("Invalid regex pattern");
+        }
     }
 }

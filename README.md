@@ -1,348 +1,150 @@
-# DIS Project - Cycle Tracker
+# Cycle Tracker Web App
+This project is a cycle tracking web application. The user can select dates in a calendar, create and update daily logs, choose a flow level, select physical symptoms, and search previous logs using regular expression matching.
 
-This project is a cycle tracking web application for the course **Databases and Information Systems**.
+The project uses:
 
-The app lets a user track menstrual cycles, daily logs, bleeding flow and physical symptoms.  
-For this project, we use **one hardcoded test user** and therefore do not have a login system.
+- ASP.NET Core / C# backend
+- React / Vite frontend
+- PostgreSQL database
+- Raw SQL through Npgsql
+- Redux for frontend state management
 
----
+# Prerequisites
 
-## Tech stack
+Make sure the following are installed before running the project:
 
-### Backend
+- [.NET SDK 9.0](https://dotnet.microsoft.com/download)
+- [Node.js 22+](https://nodejs.org/)
+- [PostgreSQL 15+](https://www.postgresql.org/download/)
 
-- ASP.NET Core
-- Entity Framework Core
-- PostgreSQL
+# Project Structure
 
-### Frontend
-
-- React
-- Vite
-
----
-
-## Project structure
-
-```text
-DIS-Project
-├── DIS.Backend
-│   ├── Data
-│   │   └── AppDbContext.cs
-│   ├── Models
-│   │   ├── Person.cs
-│   │   ├── Cycle.cs
-│   │   ├── DailyLog.cs
-│   │   ├── FlowLevel.cs
-│   │   ├── PhysicalSymptom.cs
-│   │   └── DailyLogSymptom.cs
-│   ├── Migrations
-│   ├── Program.cs
-│   └── appsettings.Development.json
-│
-├── DIS.Frontend
-│   ├── src
-│   │   └── App.jsx
-│   └── package.json
-│
+```
+DIS-Project/
+├── DIS.Backend/
+│   ├── Controllers/
+│   ├── CycleTracker/
+│   │   ├── Interfaces/
+│   │   └── Models/
+│   ├── Data/
+│   │   ├── Schema.sql
+│   │   └── Seed.sql
+│   ├── DTO/
+│   └── Interfaces/
+├── DIS.Frontend/
+│   └── WebApp/
+│       ├── css/
+│       └── src/
+│           ├── actions/
+│           ├── Pages/
+│           └── reducers/
+├── docs/
+│   └── er-diagram.png
 └── README.md
 ```
 
----
+# E/R Diagram
 
-## Database structure
+The database model is shown here:
 
-The database contains these main tables:
+![E/R Diagram](docs/er-diagram.png)
 
-- `Persons`
-- `Cycles`
-- `DailyLogs`
-- `FlowLevels`
-- `PhysicalSymptoms`
-- `DailyLogSymptoms`
+The main database tables are:
+- `persons`
+- `cycles`
+- `daily_logs`
+- `flow_levels`
+- `physical_symptom`
+- `daily_log_symptoms`
 
-Relationships:
+# Database Setup
 
-- One `Person` can have many `Cycles`
-- One `Cycle` can have many `DailyLogs`
-- One `DailyLog` can have one `FlowLevel`
-- One `DailyLog` can have many `PhysicalSymptoms`
-- `DailyLogSymptoms` is the join table between `DailyLogs` and `PhysicalSymptoms`
+The project expects a PostgreSQL database called `cycle_tracker` and a user `cycle_user`.
 
----
-
-## Local setup
-
-### 1. Clone the project
-
-```bash
-git clone https://github.com/annhumle/DIS-Project.git
-cd DIS-Project
-```
-
-If you need the setup branch:
-
-```bash
-git switch christine-setup
-```
-
----
-
-## PostgreSQL setup
-
-Make sure PostgreSQL is installed and running.
-
-Check PostgreSQL:
-
-```bash
-psql --version
-pg_isready -h localhost -p 5432
-```
-
-You should see something like:
-
-```text
-localhost:5432 - accepting connections
-```
-
-Open PostgreSQL:
-
-```bash
-psql -d postgres
-```
-
-Create the database user and database:
+To create the database and user, run the following in psql:
 
 ```sql
 CREATE ROLE cycle_user WITH LOGIN PASSWORD 'cycle_password';
 CREATE DATABASE cycle_tracker OWNER cycle_user;
 ```
 
-Exit PostgreSQL:
+Then initialize the database by running these files in order:
 
-```sql
-\q
+```
+DIS.Backend/Data/Schema.sql
+DIS.Backend/Data/Seed.sql
 ```
 
-If the role or database already exists, that is okay.
+`Schema.sql` creates the tables, and `Seed.sql` inserts test data.
 
----
+## Connection string
 
-## Backend setup
-
-Go to the backend folder:
-
-```bash
-cd DIS.Backend
-```
-
-The backend connection string is in:
-
-```text
-DIS.Backend/appsettings.Development.json
-```
-
-It should look like this:
+Create the file `DIS.Backend/appsettings.Development.json` with the following content:
 
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Port=5432;Database=cycle_tracker;Username=cycle_user;Password=cycle_password"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
   }
 }
 ```
 
-Install the Entity Framework tool if needed:
+# Compile and Run
+
+## Backend
+
+Open a terminal in the project root and run:
 
 ```bash
-dotnet tool install --global dotnet-ef --version "9.*"
-```
-
-If it is already installed, update it:
-
-```bash
-dotnet tool update --global dotnet-ef --version "9.*"
-```
-
-Build the backend:
-
-```bash
+cd DIS.Backend
 dotnet restore
 dotnet build
+dotnet run --launch-profile http
 ```
 
-Create/update the database tables:
+The backend runs on: `http://localhost:5221`
 
-```bash
-dotnet ef database update
-```
+## Frontend
 
-Run the backend:
-
-```bash
-dotnet run
-```
-
-The backend should run on:
-
-```text
-http://localhost:5221
-```
-
----
-
-## API endpoints
-
-These endpoints can be tested in the browser:
-
-```text
-GET http://localhost:5221/
-GET http://localhost:5221/api/person
-GET http://localhost:5221/api/cycles
-GET http://localhost:5221/api/cycles/1/logs
-GET http://localhost:5221/api/dailylogs
-GET http://localhost:5221/api/flow-levels
-GET http://localhost:5221/api/symptoms
-```
-
----
-
-## Frontend setup
-
-Open a new terminal and go to the frontend folder:
+Open a second terminal in the project root and run:
 
 ```bash
 cd DIS.Frontend
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Run the frontend:
-
-```bash
 npm run dev
 ```
 
-The frontend should run on:
+The frontend runs on: `http://localhost:5173`
 
-```text
-http://localhost:5173
-```
+Open this URL in a browser.
 
----
+# How to Use the Web App
 
-## Development split
+The app has three main panels:
 
-### Anna: Cycle + Daily Log
+- **Symptom search** on the left
+- **Calendar** in the middle
+- **Daily log editor** on the right
 
-Anna works mainly with:
+Click a date in the calendar to select it. If a daily log already exists for that date, the saved data is loaded. If no log exists, you can create one.
 
-- `Person`
-- `Cycle`
-- `DailyLog`
+For each daily log, you can:
 
-Relevant backend endpoints:
+- Choose a flow level
+- Select one or more physical symptoms
+- Save a new daily log
+- Update an existing daily log
 
-- `GET /api/cycles`
-- `GET /api/cycles/{id}/logs`
-- Later: `POST /api/dailylogs`
+The symptom search panel supports regular expressions. It searches all previous daily logs and highlights matching dates in the calendar. Examples: `mood`, `^m`, `cramp|fatigue`.
 
-Relevant frontend parts:
+# SQL and Regex
 
-- Cycle overview
-- Daily log list
-- Daily log form
+The app interacts with the PostgreSQL database using raw SQL through Npgsql. The backend uses SQL statements such as SELECT, INSERT, UPDATE and DELETE in `CycleTrackerRepository.cs`.
 
----
+The app also performs regular expression matching in the symptom search feature. The user can enter a regex pattern, and the backend searches for daily logs where the symptom name matches the pattern.
 
-### Christine: Flow + Symptoms
+## AI Declaration
 
-Christine works mainly with:
+We used AI tools in this project, mainly ChatGPT. AI was used for idea generation, help with setting up standard parts of the program in the beginning, explaining error messages, and support with debugging when problems occurred.
 
-- `FlowLevel`
-- `PhysicalSymptom`
-- `DailyLogSymptom`
-
-Relevant backend endpoints:
-
-- `GET /api/flow-levels`
-- `GET /api/symptoms`
-- Later: `POST /api/dailylogs/{id}/flow`
-- Later: `POST /api/dailylogs/{id}/symptoms`
-
-Relevant frontend parts:
-
-- Flow level selector
-- Symptom selector
-- Show flow and symptoms on daily logs
-- Regex search/filter for symptoms
-
-Example regex search:
-
-```text
-head.*
-```
-
-This should match:
-
-```text
-Headache
-```
-
----
-
-## Useful commands
-
-### Check current Git status
-
-```bash
-git status
-```
-
-### Start backend
-
-```bash
-cd DIS.Backend
-dotnet run
-```
-
-### Start frontend
-
-```bash
-cd DIS.Frontend
-npm run dev
-```
-
-### Apply database migrations
-
-```bash
-cd DIS.Backend
-dotnet ef database update
-```
-
-### Create a new migration after model changes
-
-```bash
-cd DIS.Backend
-dotnet ef migrations add MigrationName
-dotnet ef database update
-```
-
----
-
-## Notes
-
-- The app currently uses one hardcoded test user.
-- There is no login system.
-- `bin/`, `obj/` and `node_modules/` should not be committed to Git.
-- PostgreSQL must be running before the backend can connect to the database.
+Most of the code was written by us, and everything has been reviewed, adapted, and tested by us.
