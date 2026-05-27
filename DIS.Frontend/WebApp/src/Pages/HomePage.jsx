@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import {
+    searchDailyLogsBySymptomPattern,
+    clearSymptomSearchResults
+} from "../actions/symptomSearchActions";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getCycles } from "../actions/cycleActions";
@@ -9,6 +13,8 @@ import {
     createDailyLog,
     updateDailyLog
 } from "../actions/dailyLogActions";
+
+
 
 import "../../css/HomePage.css";
 
@@ -57,6 +63,11 @@ function HomePage() {
 
     const [selectedDate, setSelectedDate] = useState(todayIso());
 
+    const searchResults = useSelector(state => state.symptomSearchState.results);
+    const searchLoading = useSelector(state => state.symptomSearchState.loading);
+    const searchPattern = useSelector(state => state.symptomSearchState.pattern);
+    const searchDateIsos = new Set(searchResults.map(result => result.date.slice(0, 10)));
+
     useEffect(() => {
         dispatch(getCycles());
         dispatch(getFlowLevels());
@@ -79,11 +90,20 @@ function HomePage() {
                 <h1 className="cycle-title">Cycle Tracker</h1>
             </header>
             <main className="cycle-page">
+                <SearchPanel
+                    physicalSymptoms={physicalSymptoms}
+                    results={searchResults}
+                    loading={searchLoading}
+                    currentPattern={searchPattern}
+                    onSelectDate={setSelectedDate}
+                />
+
                 <aside className="card">
                     <Calendar
                         selectedDate={selectedDate}
                         onSelect={setSelectedDate}
                         loggedDateIsos={loggedDateIsos}
+                        searchDateIsos={searchDateIsos}
                     />
                 </aside>
 
@@ -101,7 +121,116 @@ function HomePage() {
     );
 }
 
-function Calendar({ selectedDate, onSelect, loggedDateIsos }) {
+function SearchPanel({ physicalSymptoms, results, loading, currentPattern, onSelectDate }) {
+    const dispatch = useDispatch();
+
+    const [pattern, setPattern] = useState(currentPattern ?? "");
+    const [regexError, setRegexError] = useState("");
+
+    function runSearch(nextPattern) {
+        setPattern(nextPattern);
+
+        if (!nextPattern.trim()) {
+            setRegexError("");
+            dispatch(clearSymptomSearchResults());
+            return;
+        }
+
+        try {
+            new RegExp(nextPattern);
+            setRegexError("");
+            dispatch(searchDailyLogsBySymptomPattern(nextPattern));
+        } catch {
+            setRegexError("Invalid regex pattern");
+        }
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        runSearch(pattern);
+    }
+
+    function formatDate(dateString) {
+        return parseLocalIso(dateString.slice(0, 10)).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        });
+    }
+
+    return (
+        <aside className="card search-card">
+            <h2 className="search-title">Symptom search</h2>
+            <p className="search-help">
+                Search with text or regex, e.g. <strong>mood</strong>, <strong>^m</strong> or <strong>cramp|fatigue</strong>.
+            </p>
+
+            <form onSubmit={handleSubmit} className="search-form">
+                <input
+                    type="text"
+                    value={pattern}
+                    onChange={e => setPattern(e.target.value)}
+                    placeholder="Search symptoms..."
+                />
+                <button type="submit" className="search-button">
+                    Search
+                </button>
+            </form>
+
+            {regexError && <p className="search-error">{regexError}</p>}
+
+            <div className="quick-filters">
+                <span className="quick-filter-label">Quick filters</span>
+                <div className="quick-filter-grid">
+                    {physicalSymptoms.map(symptom => (
+                        <button
+                            key={symptom.physicalSymptomId}
+                            type="button"
+                            className="quick-filter"
+                            onClick={() => runSearch(symptom.physicalSymptomName)}
+                        >
+                            {symptom.physicalSymptomName}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="search-results">
+                <h3>Results</h3>
+
+                {loading && <p className="search-muted">Searching...</p>}
+
+                {!loading && pattern.trim() && results.length === 0 && !regexError && (
+                    <p className="search-muted">No matching daily logs found.</p>
+                )}
+
+                {!loading && results.map(result => {
+                    const iso = result.date.slice(0, 10);
+
+                    return (
+                        <button
+                            key={`${result.dailyLogId}-${result.physicalSymptomId}`}
+                            type="button"
+                            className="search-result"
+                            onClick={() => onSelectDate(iso)}
+                        >
+                            <span className="search-result-symptom">
+                                {result.physicalSymptomName}
+                            </span>
+                            <span>{formatDate(result.date)}</span>
+                            <span>Cycle day {result.cycleDay}</span>
+                            {result.flowLevelName && (
+                                <span>Flow: {result.flowLevelName}</span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </aside>
+    );
+}
+
+function Calendar({ selectedDate, onSelect, loggedDateIsos, searchDateIsos }) {
 
     const [viewMonth, setViewMonth] = useState(() => {
         const d = parseLocalIso(selectedDate);
@@ -143,6 +272,7 @@ function Calendar({ selectedDate, onSelect, loggedDateIsos }) {
         if (iso === selectedDate) classes.push("selected");
         if (iso === today) classes.push("today");
         if (loggedDateIsos.has(iso)) classes.push("has-log");
+        if (searchDateIsos?.has(iso)) classes.push("search-match");
 
         cells.push(
             <button

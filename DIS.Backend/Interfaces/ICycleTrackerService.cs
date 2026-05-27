@@ -10,5 +10,6 @@ namespace DIS.ApiTwo.Interfaces
         Task<List<DailyLogDTO>> GetLogsByCycleId(int cycleId);
         Task<DailyLogDTO> CreateDailyLog(CreateDailyLogDTO dto);
         Task<DailyLogDTO?> UpdateDailyLog(int dailyLogId, UpdateDailyLogDTO dto);
+        Task<List<SymptomSearchResultDTO>> SearchDailyLogsBySymptomRegexPattern(string pattern);
     }
 }
