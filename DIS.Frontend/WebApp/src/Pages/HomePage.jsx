@@ -162,7 +162,7 @@ function SearchPanel({ physicalSymptoms, results, loading, currentPattern, onSel
         <aside className="card search-card">
             <h2 className="search-title">Symptom search</h2>
             <p className="search-help">
-                Search with text or regex, e.g. <strong>mood</strong>, <strong>^m</strong> or <strong>cramp|fatigue</strong>.
+                See all the days you logged a particular symptom.
             </p>
 
             <form onSubmit={handleSubmit} className="search-form">
@@ -170,7 +170,7 @@ function SearchPanel({ physicalSymptoms, results, loading, currentPattern, onSel
                     type="text"
                     value={pattern}
                     onChange={e => setPattern(e.target.value)}
-                    placeholder="Search symptoms..."
+                    placeholder="Type here..."
                 />
                 <button type="submit" className="search-button">
                     Search
