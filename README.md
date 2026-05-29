@@ -23,21 +23,61 @@ Make sure the following are installed before running the project:
 DIS-Project/
 ├── DIS.Backend/
 │   ├── Controllers/
+│   │   └── Controller.cs
 │   ├── CycleTracker/
+│   │   ├── CycleTrackerRepository.cs
+│   │   ├── CycleTrackerService.cs
 │   │   ├── Interfaces/
+│   │   │   └── IRepository.cs
 │   │   └── Models/
+│   │       ├── Cycle.cs
+│   │       ├── DailyLog.cs
+│   │       ├── DailyLogSymptom.cs
+│   │       ├── FlowLevel.cs
+│   │       ├── Person.cs
+│   │       └── PhysicalSymptom.cs
 │   ├── Data/
+│   │   ├── DatabaseConnections.cs
 │   │   ├── Schema.sql
 │   │   └── Seed.sql
 │   ├── DTO/
-│   └── Interfaces/
+│   │   ├── CreateDailyLogDTO.cs
+│   │   ├── CycleDTO.cs
+│   │   ├── DailyLogDTO.cs
+│   │   ├── FlowLevelDTO.cs
+│   │   ├── PhysicalSymptomDTO.cs
+│   │   ├── SymptomSearchResultDTO.cs
+│   │   └── UpdateDailyLogDTO.cs
+│   ├── Interfaces/
+│   │   └── ICycleTrackerService.cs
+│   └── Program.cs
 ├── DIS.Frontend/
 │   └── WebApp/
 │       ├── css/
+│       │   ├── App.css
+│       │   ├── HomePage.css
+│       │   └── index.css
 │       └── src/
 │           ├── actions/
+│           │   ├── cycleActions.js
+│           │   ├── dailyLogActions.js
+│           │   ├── errors.js
+│           │   ├── flowLevelActions.js
+│           │   ├── physicalSymptomActions.js
+│           │   └── symptomSearchActions.js
 │           ├── Pages/
-│           └── reducers/
+│           │   └── HomePage.jsx
+│           ├── reducers/
+│           │   ├── cycleReducer.js
+│           │   ├── dailyLogReducer.js
+│           │   ├── flowLevelReducer.js
+│           │   ├── index.js
+│           │   ├── physicalSymptomReducer.js
+│           │   └── symptomSearchReducer.js
+│           ├── App.jsx
+│           ├── main.jsx
+│           ├── store.js
+│           └── utils.js
 ├── docs/
 │   └── er-diagram.png
 └── README.md
@@ -79,7 +119,7 @@ DIS.Backend/Data/Seed.sql
 
 ## Connection string
 
-Create the file `DIS.Backend/appsettings.Development.json` with the following content:
+The repo includes `DIS.Backend/appsettings.Development.json` with the following connection string. Update it if your local Postgres credentials differ.
 
 ```json
 {
@@ -97,8 +137,6 @@ Open a terminal in the project root and run:
 
 ```bash
 cd DIS.Backend
-dotnet restore
-dotnet build
 dotnet run --launch-profile http
 ```
 
@@ -145,6 +183,4 @@ The app also performs regular expression matching in the symptom search feature.
 
 ## AI Declaration
 
-We used AI tools in this project, mainly ChatGPT. AI was used for idea generation, help with setting up standard parts of the program in the beginning, explaining error messages, and support with debugging when problems occurred.
-
-Most of the code was written by us, and everything has been reviewed, adapted, and tested by us.
+We used AI tools in this project, mainly ChatGPT, for idea generation and general questions about the different technologies and applications used.
