@@ -110,24 +110,30 @@ CREATE DATABASE cycle_tracker OWNER cycle_user;
 
 Then initialize the database by running the following commands from the project root directory:
 
+```bash
 psql -U cycle_user -d cycle_tracker -f DIS.Backend/Data/Schema.sql
 psql -U cycle_user -d cycle_tracker -f DIS.Backend/Data/Seed.sql
+```
 
 `Schema.sql` creates the tables, and `Seed.sql` inserts test data.
 
 If the commands execute successfully, you should see output similar to:
 
+```
 CREATE TABLE
 CREATE TABLE
 CREATE TABLE
 ...
+```
 
 and:
 
+```
 TRUNCATE TABLE
 INSERT 0 1
 INSERT 0 3
 ...
+```
 
 ## Connection string
 
