@@ -99,7 +99,7 @@ The main database tables are:
 
 # Database Setup
 
-The project expects a PostgreSQL database called `cycle_tracker` and a user `cycle_user`.
+The project expects a PostgreSQL database called `cycle_tracker` and a user called `cycle_user`.
 
 To create the database and user, run the following in psql:
 
@@ -108,14 +108,26 @@ CREATE ROLE cycle_user WITH LOGIN PASSWORD 'cycle_password';
 CREATE DATABASE cycle_tracker OWNER cycle_user;
 ```
 
-Then initialize the database by running these files in order:
+Then initialize the database by running the following commands from the project root directory:
 
-```
-DIS.Backend/Data/Schema.sql
-DIS.Backend/Data/Seed.sql
-```
+psql -U cycle_user -d cycle_tracker -f DIS.Backend/Data/Schema.sql
+psql -U cycle_user -d cycle_tracker -f DIS.Backend/Data/Seed.sql
 
 `Schema.sql` creates the tables, and `Seed.sql` inserts test data.
+
+If the commands execute successfully, you should see output similar to:
+
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+...
+
+and:
+
+TRUNCATE TABLE
+INSERT 0 1
+INSERT 0 3
+...
 
 ## Connection string
 
